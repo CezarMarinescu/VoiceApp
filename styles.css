@@ -1,0 +1,34 @@
+body{
+    background-image: url(images/neon-city-101.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    text-align: center;
+}
+
+.container h1{
+    color: white;
+}
+
+.container p{
+    color: white;
+}
+
+.container div{
+    color: white;
+}
+
+#submitBtn{
+    margin: 10px 0;
+    width: 200px;
+    height: 50px;
+}
+
