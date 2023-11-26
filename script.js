@@ -23,7 +23,7 @@ function drawCalendar() {
 
     canvas.width = totalWidth; 
 
-    context.fillStyle = 'black';
+    context.fillStyle = 'white';
     context.font = '16px Arial'; 
 
     for (let row = 0; row < numRows; row++) {
