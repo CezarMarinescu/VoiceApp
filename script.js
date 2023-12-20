@@ -95,12 +95,21 @@ function setReminder(task, time, selectedSound) {
         document.getElementById('response').textContent = "Invalid reminder time.";
         return;
     }
+    
 
     setTimeout(() => {
         document.getElementById('response').textContent = `Reminder: ${task}`;
         audio = new Audio(selectedSound);
         audio.play();
     }, timeDiff);
+}
+
+function createSoundMap(sounds) {
+    const soundMap = {};
+    sounds.forEach(sound => {
+        soundMap[sound.name.toLowerCase()] = sound.path;
+    });
+    return soundMap;
 }
 
 const recognition = new webkitSpeechRecognition(); 
@@ -114,42 +123,61 @@ document.getElementById('submitBtn').addEventListener('click', function () {
 recognition.onresult = function (event) {
     const result = event.results[0][0].transcript.toLowerCase(); 
     console.log('Recognized speech: ' + result);
-    const soundMap = {
-        "blue": "music/Black Eyed Peas - Pump It (Lyrics) - YouTube - Google Chrome 2023-11-02 15-56-21.mp3",
-        "stop": "stop",
-        "set": "music/iPhone Radar Alarm_Ringtone (Apple Sound) - Sound Effect for Editing - YouTube - Google Chrome 2023-11-02 17-06-09.mp3",
-    };
+    fetch('sounds.json')
+        .then(response => response.json())
+        .then(data => {
+           
+            const soundMap = createSoundMap(data.sounds);
 
-    if (Object.keys(soundMap).includes(result)) {
-        const selectedSound = soundMap[result];
+            if (Object.keys(soundMap).includes(result)) {
+                const selectedSound = soundMap[result];
 
-        if (result === "stop") {
-            if (audio) {
-                audio.pause();
-                audio.currentTime = 0;
-                document.getElementById('response').textContent = "Music stopped.";
+                if (result === "stop") {
+                    if (audio) {
+                        audio.pause();
+                        audio.currentTime = 0;
+                        document.getElementById('response').textContent = "Music stopped.";
+
+                        const canvas = document.getElementById('canvas');
+                    const context = canvas.getContext('2d');
+                    const image = new Image();
+                    image.src = "images/Untitled-1.jpg"; 
+                    image.onload = function() {
+                        context.drawImage(image, 0, 0, canvas.width, canvas.height);
+                    };
+                    }
+                } 
+                else if (result === "set") {
+                    console.log("Set reminder");
+                    populateCanvas(() => {
+                        const task = selectedSound;
+                        const time = Date.now() + 3000; 
+                        setReminder(task, time, selectedSound);
+                    });
+                } 
+                else {
+                    console.log("Playing sound: " + selectedSound);
+                    audio = new Audio(selectedSound);
+                    audio.play();
+                    document.getElementById('response').textContent = "Playing sound: " + selectedSound;
+                
+                    const canvas = document.getElementById('canvas');
+                    const context = canvas.getContext('2d');
+                    const image = new Image();
+                    image.src = "images/hero-image.fill.size_1200x900.v1659974499.jpg"; 
+                    image.onload = function() {
+                        context.drawImage(image, 0, 0, canvas.width, canvas.height);
+                    };
+                }
+            } else {
+                document.getElementById('response').textContent = "Sorry, I didn't recognize the sound name. Please try again.";
             }
-        } else if (result === "set") {
-            console.log("Set reminder");
-            populateCanvas(() => {
-
-                const task = selectedSound;
-                const time = Date.now() + 3000; 
-                setReminder(task, time, selectedSound);
-            });
-        } else {
-            console.log("Playing sound: " + selectedSound);
-            audio = new Audio(selectedSound);
-
-            audio.play();
-
-            document.getElementById('response').textContent = "Playing sound: " + selectedSound;
-        }
-    } else {
-        document.getElementById('response').textContent = "Sorry, I didn't recognize the sound name. Please try again.";
-    }
+        })
+        .catch(error => console.error('Error loading JSON file:', error));
 };
 
 recognition.onerror = function (event) {
     console.error('Speech recognition error:', event.error);
 };
+
+

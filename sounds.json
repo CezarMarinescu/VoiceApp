@@ -1,0 +1,39 @@
+{
+    "sounds": [
+      {
+        "name": "Stop",
+        "path": "stop"
+      },
+      {
+        "name": "Set",
+        "path": "music/iPhone Radar Alarm_Ringtone (Apple Sound) - Sound Effect for Editing - YouTube - Google Chrome 2023-11-02 17-06-09.mp3"
+      },
+      {
+        "name": "Thunderstruck",
+        "path": "music/ACDC - Thunderstruck (Official Video).mp3"
+      },
+      {
+        "name": "Pump It",
+        "path": "music/Black Eyed Peas - Pump It (Lyrics) - YouTube - Google Chrome 2023-11-02 15-56-21.mp3"
+      },
+      {
+        "name": "Despacito",
+        "path": "music/Lyric Video) ft. Daddy Yankee.mp3"
+      },
+      {
+        "name": "Billie Jean",
+        "path": "music/Michael Jackson - Billie Jean (Official Video).mp3"
+      },
+      {
+        "name": "Blinding Lights",
+        "path": "music/The Weeknd - Blinding Lights (Official Audio).mp3"
+      },
+      {
+        "name": "Chocolate",
+        "path": "music/Tzanca Uraganu - CIOCOLATA (video concert).mp3"
+      }
+      
+    ]
+  }
+
+  
