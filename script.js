@@ -19,7 +19,6 @@ function drawCalendar() {
     const totalWidth = numColumns * cellWidth + timeSectionWidth;
 
     const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
     canvas.width = totalWidth; 
 
@@ -47,39 +46,49 @@ function drawCalendar() {
     context.fillStyle = 'gray';
     context.fillRect(numColumns * cellWidth, 0, timeSectionWidth, numRows * cellHeight);
 
+canvas.addEventListener('click', function(event) {
+    const rect = canvas.getBoundingClientRect();
+    const mouseX = event.clientX - rect.left;
+    const mouseY = event.clientY - rect.top;
 
-    context.fillStyle = 'white';
-    context.font = '10px Arial'; 
-    for (let i = 0; i < 24; i++) {
-        const hourText = (i < 10) ? '0' + i + ':00' : i + ':00';
-        context.fillText(hourText, numColumns * cellWidth + 5, i * (cellHeight / 2) + 15);
-    }
+    if (mouseX < numColumns * cellWidth && mouseY < numRows * cellHeight) {
+        const clickedCol = Math.floor(mouseX / cellWidth);
+        const clickedRow = Math.floor(mouseY / cellHeight);
 
+        if (clickedRow !== 0) {
+            const selectedDate = clickedCol + (clickedRow - 1) * numColumns + 1;
+            console.log('Selected Date:', selectedDate);
 
+            const reminderTime = new Date(); 
+            reminderTime.setDate(selectedDate); 
 
+            const selectedHour = prompt("Enter the hour for the reminder (0-23):", "");
+            if (selectedHour !== null) {
+                reminderTime.setHours(parseInt(selectedHour), 0, 0); 
 
-    canvas.addEventListener('click', function(event) {
-        const rect = canvas.getBoundingClientRect();
-        const mouseX = event.clientX - rect.left;
-        const mouseY = event.clientY - rect.top;
+                const task = prompt("Enter the task/message for the reminder:", "Your Task Here");
 
-        if (mouseX < numColumns * cellWidth && mouseY < numRows * cellHeight) {
-            const clickedCol = Math.floor(mouseX / cellWidth);
-            const clickedRow = Math.floor(mouseY / cellHeight);
+                if (task !== null) {
+                    const selectedSound = 'path_to_sound_file.mp3'; 
 
-            if (clickedRow !== 0) {
-                const selectedDate = clickedCol + (clickedRow - 1) * numColumns + 1; 
-                console.log('Selected Date:', selectedDate);
+        
+                    setReminder(task, reminderTime, selectedSound);
+                } else {
+                    console.log("Task setup cancelled or empty.");
+                }
+            } else {
+                console.log("Hour setup cancelled or invalid hour.");
             }
         }
-        if (mouseX >= numColumns * cellWidth) {
-            const clickedHour = Math.floor((mouseY * 24) / (numRows * cellHeight)); 
-            console.log('Selected Hour:', clickedHour);
-        }
-    });
+    }
+
+    if (mouseX >= numColumns * cellWidth) {
+
+        const clickedHour = Math.floor((mouseY * 24) / (numRows * cellHeight));
+        console.log('Selected Hour:', clickedHour);
+    }
+});
 }
-
-
 
 let audio;
 
@@ -90,17 +99,30 @@ function setReminder(task, time, selectedSound) {
     const reminderTime = new Date(time);
 
     const timeDiff = reminderTime - now;
-
     if (timeDiff <= 0) {
         document.getElementById('response').textContent = "Invalid reminder time.";
         return;
     }
-    
+
+    const reminderDay = reminderTime.getDate();
+    const reminderMonth = reminderTime.getMonth();
+    const reminderYear = reminderTime.getFullYear();
 
     setTimeout(() => {
-        document.getElementById('response').textContent = `Reminder: ${task}`;
-        audio = new Audio(selectedSound);
-        audio.play();
+        const currentDate = new Date();
+        const currentDay = currentDate.getDate();
+        const currentMonth = currentDate.getMonth();
+        const currentYear = currentDate.getFullYear();
+
+        if (
+            currentYear === reminderYear &&
+            currentMonth === reminderMonth &&
+            currentDay === reminderDay
+        ) {
+            document.getElementById('response').textContent = `Reminder: ${task}`;
+            audio = new Audio(selectedSound);
+            audio.play();
+        }
     }, timeDiff);
 }
 
@@ -150,9 +172,7 @@ recognition.onresult = function (event) {
                 else if (result === "set") {
                     console.log("Set reminder");
                     populateCanvas(() => {
-                        const task = selectedSound;
-                        const time = Date.now() + 3000; 
-                        setReminder(task, time, selectedSound);
+                        // const task = selectedSound;
                     });
                 } 
                 else {
