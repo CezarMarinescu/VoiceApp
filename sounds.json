@@ -5,6 +5,10 @@
         "path": "stop"
       },
       {
+        "name": "query",
+        "path": "query"
+      },
+      {
         "name": "Set",
         "path": "music/iPhone Radar Alarm_Ringtone (Apple Sound) - Sound Effect for Editing - YouTube - Google Chrome 2023-11-02 17-06-09.mp3"
       },
