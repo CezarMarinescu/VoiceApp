@@ -8,8 +8,7 @@ function populateCanvas(callback) {
     callback();
 }
 
-// i want a function that takes a query and calls the openai api with the query and returns the response
-const OPENAI_API_KEY = "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";
+const OPENAI_API_KEY = "";
 const MAX_RETRIES = 3;
 
 async function callOpenAI(query, retries = 0) {
