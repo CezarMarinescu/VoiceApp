@@ -8,63 +8,13 @@ function populateCanvas(callback) {
     callback();
 }
 
-const OPENAI_API_KEY = "";
-const MAX_RETRIES = 3;
-
-async function callOpenAI(query, retries = 0) {
-    const prompt = query;
-    const temperature = 0.9;
-    const maxTokens = 150;
-    const topP = 1;
-    const frequencyPenalty = 0.0;
-    const presencePenalty = 0.0;
-    const stop = ["\n", " Human:", " AI:"];
-    const engine = "davinci";
-    const stream = false;
-
-    const body = {
-        prompt,
-        temperature,
-        max_tokens: maxTokens,
-        top_p: topP,
-        frequency_penalty: frequencyPenalty,
-        presence_penalty: presencePenalty,
-        stop,
-        engine,
-        stream,
-    };
-
-    const requestOptions = {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${OPENAI_API_KEY}`,
-        },
-        body: JSON.stringify(body),
-    };
-
-    try {
-        const response = await fetch("https://api.openai.com/v1/engines/davinci/completions", requestOptions);
-
-        if (response.status === 429 && retries < MAX_RETRIES) {
-            const retryAfter = response.headers.get('Retry-After') || 5; // default to 5 seconds
-            await new Promise(resolve => setTimeout(resolve, (retryAfter + 1) * 1000));
-            return callOpenAI(query, retries + 1); // Retry the request
-        } else {
-            const data = await response.json();
-            if (data && data.choices && data.choices.length > 0) {
-                return data.choices[0].text;
-            }
-            return "No valid response";
-        }
-    } catch (error) {
-        console.error("Error:", error);
-        return "An error occurred";
+function getResponse(text){
+    if(text == "what is your name"){
+        prompt("My name is VoiceApp");
     }
-}
-
-async function getResponse(query) {
-    return await callOpenAI(query);
+    if (text == "what is the time"){
+        prompt("The time is "+new Date());
+    }
 }
 
 
@@ -231,7 +181,6 @@ recognition.onresult = function (event) {
                     }
                 } 
                 else if ( result==="query"){
-                    // here i want to get a query from the user and then call the getResponse function with the query and then display the response on the canvas
                     const query = prompt("Enter your query:", "Your Query Here");
                     if (query !== null) {
                         getResponse(query).then((response) => {
