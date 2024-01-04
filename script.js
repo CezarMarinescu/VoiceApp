@@ -94,6 +94,7 @@ canvas.addEventListener('click', function(event) {
                     const selectedSound = 'music/iPhone Radar Alarm_Ringtone (Apple Sound) - Sound Effect for Editing - YouTube - Google Chrome 2023-11-02 17-06-09.mp3'; 
 
                     setReminder(task, reminderTime, selectedSound);
+                    document.getElementById('response').textContent = "Reminder was set";
                 } else {
                     console.log("Task setup cancelled or empty.");
                 }
