@@ -8,15 +8,26 @@ function populateCanvas(callback) {
     callback();
 }
 
-function getResponse(text){
-    if(text == "what is your name"){
-        prompt("My name is VoiceApp");
+function getResponse(text) {
+    let response;
+
+    if (text === "what is your name") {
+        response = prompt("My name is VoiceApp");
+    } else if (text === "what is your age") {
+        response = prompt("I am an AI assistant, I don't have an age.");
+    } else if (text === "what is your purpose") {
+        response = prompt("My purpose is to assist you with programming tasks.");
+    } else if (text === "quit") {
+        console.log("Exiting...");
+        return;
+    } else {
+        response = prompt("I'm sorry, I don't understand. Please ask another question or type 'quit' to exit.");
     }
-    if (text == "what is the time"){
-        prompt("The time is "+new Date());
+
+    if (response !== "quit") {
+        getResponse(response);
     }
 }
-
 
 function drawCalendar() {
     console.log("Drawing calendar...");
