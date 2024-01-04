@@ -80,9 +80,8 @@ canvas.addEventListener('click', function(event) {
                 const task = prompt("Enter the task/message for the reminder:", "Your Task Here");
 
                 if (task !== null) {
-                    const selectedSound = 'path_to_sound_file.mp3'; 
+                    const selectedSound = 'music/iPhone Radar Alarm_Ringtone (Apple Sound) - Sound Effect for Editing - YouTube - Google Chrome 2023-11-02 17-06-09.mp3'; 
 
-        
                     setReminder(task, reminderTime, selectedSound);
                 } else {
                     console.log("Task setup cancelled or empty.");
